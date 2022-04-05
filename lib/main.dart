@@ -1,30 +1,49 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(
-      MaterialApp(
-        home: Scaffold(
-          backgroundColor: const Color(0xff00BCD1),
-          body: ListTransfer(),
-          appBar: AppBar(title: const Text('ByteBank')),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {},
-          ),
-        ),
-      ),
-    );
+void main() => runApp(const ByteBankApp());
 
-class ListTransfer extends StatelessWidget {
+class ByteBankApp extends StatelessWidget {
+  const ByteBankApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Column(
-      children: [
-        CardTransferInfo(Transfer(666.69, 'Devil bread')),
-        CardTransferInfo(Transfer(42.00, 'The answer, my friend.')),
-        CardTransferInfo(Transfer(7.00, 'The Old and the New')),
-      ],
+    return const MaterialApp(
+      home: Scaffold(
+        body: TransferForm(),
+      ),
+    );
+  }
+}
+
+class TransferForm extends StatelessWidget {
+  const TransferForm({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Criando transferência')),
+    );
+  }
+}
+
+class ListTransfer extends StatelessWidget {
+  const ListTransfer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('ByteBank')),
+      body: Column(
+        children: [
+          CardTransferInfo(Transfer(666.69, 'Devil bread')),
+          CardTransferInfo(Transfer(42.00, 'The answer, my friend.')),
+          CardTransferInfo(Transfer(7.00, 'The Old and the New')),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {},
+      ),
     );
   }
 }

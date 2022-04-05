@@ -21,7 +21,39 @@ class TransferForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Criando transferência')),
+      appBar: AppBar(
+        title: const Text('Criando transferência'),
+        backgroundColor: const Color(0xffb74093),
+      ),
+      body: Column(
+        children: const <Widget>[
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TextField(
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              decoration: InputDecoration(
+                labelText: 'Descrição da transferência',
+                hintText: 'pagamento x pela razão y',
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TextField(
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.monetization_on_outlined),
+                  labelText: 'Valor',
+                  hintText: '00,00'),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -49,10 +81,9 @@ class ListTransfer extends StatelessWidget {
 }
 
 class CardTransferInfo extends StatelessWidget {
-
   final Transfer _transfer;
 
-  CardTransferInfo(this._transfer);  // alt + ins
+  CardTransferInfo(this._transfer); // alt + ins
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +96,6 @@ class CardTransferInfo extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class Transfer {

@@ -7,7 +7,7 @@ class ByteBankApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
         body: TransferForm(),
       ),
@@ -16,7 +16,8 @@ class ByteBankApp extends StatelessWidget {
 }
 
 class TransferForm extends StatelessWidget {
-  const TransferForm({Key? key}) : super(key: key);
+  final TextEditingController _TECTransferDescription = TextEditingController();
+  final TextEditingController _TECValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,32 +27,48 @@ class TransferForm extends StatelessWidget {
         backgroundColor: const Color(0xffb74093),
       ),
       body: Column(
-        children: const <Widget>[
+        children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Descrição da transferência',
                 hintText: 'pagamento x pela razão y',
               ),
+              controller: _TECTransferDescription,
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   icon: Icon(Icons.monetization_on_outlined),
                   labelText: 'Valor',
                   hintText: '00,00'),
               keyboardType: TextInputType.number,
+              controller: _TECValue,
             ),
           ),
+          ElevatedButton(
+            child: const Text('Ok'),
+            onPressed: () {
+              final String strTransferDescription =
+                  _TECTransferDescription.text;
+              final double? dblValue = double.tryParse(_TECValue.text);
+
+              if (strTransferDescription != '' && dblValue != null) {
+                final Transfer _createdTransfer =
+                    Transfer(dblValue, strTransferDescription);
+                debugPrint('$_createdTransfer');
+              }
+            },
+          )
         ],
       ),
     );
@@ -103,4 +120,9 @@ class Transfer {
   final String transferDescription;
 
   Transfer(this.value, this.transferDescription);
+
+  @override
+  String toString() {
+    return 'Transfer{value: $value, transferDescription: $transferDescription}';
+  }
 }

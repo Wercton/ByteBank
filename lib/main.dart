@@ -9,87 +9,7 @@ class ByteBankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: TransferForm(),
-      ),
-    );
-  }
-}
-// shift + F6 -> rename
-// ctrl + alt + m -> extrai método
-class TransferForm extends StatelessWidget {
-
-  final TextEditingController _TECTransferDescription = TextEditingController();
-  final TextEditingController _TECValue = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Criando transferência'),
-        backgroundColor: const Color(0xffb74093),
-      ),
-      body: Column(
-        children: <Widget>[
-          Editor(
-              strLabel: 'Transfer Description',
-              strHint: 'Payment for reason x',
-              controller: _TECTransferDescription,
-          ),
-          Editor(
-            strLabel: 'Value',
-            strHint: '0.00',
-            controller: _TECValue,
-            iconMoney: Icons.monetization_on_outlined,
-          ),
-          ElevatedButton(
-            child: const Text('Ok'),
-            onPressed: () => TransferEfetuation(context),
-          )
-        ],
-      ),
-    );
-  }
-
-  void TransferEfetuation(BuildContext context) {
-    final String strTransferDescription =
-        _TECTransferDescription.text;
-    final double? dblValue = double.tryParse(_TECValue.text);
-    
-    if (strTransferDescription != '' && dblValue != null) {
-      final Transfer _createdTransfer =
-          Transfer(dblValue, strTransferDescription);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('$_createdTransfer'),
-        )
-      );
-    }
-  }
-}
-
-class Editor extends StatelessWidget {
-
-  final String? strLabel;
-  final String? strHint;
-  final TextEditingController? controller;
-  final IconData? iconMoney;
-
-  Editor({this.strLabel, this.strHint, this.controller, this.iconMoney});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        style: const TextStyle(
-          fontSize: 24,
-        ),
-        decoration: InputDecoration(
-          icon: iconMoney != null ? Icon(iconMoney) : null,
-          labelText: strLabel,
-          hintText: strHint,
-        ),
-        controller: controller,
+        body: ListTransfer(),
       ),
     );
   }
@@ -111,7 +31,16 @@ class ListTransfer extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          final Future<Transfer?> transferNew =
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return TransferForm();
+          }));
+
+          transferNew.then((transferReceived) {
+            debugPrint('$transferReceived');
+          });
+        },
       ),
     );
   }
@@ -130,6 +59,84 @@ class CardTransferInfo extends StatelessWidget {
         leading: const Icon(Icons.monetization_on_outlined),
         title: Text(_transfer.value.toString()),
         subtitle: Text(_transfer.transferDescription),
+      ),
+    );
+  }
+}
+
+class TransferForm extends StatelessWidget {
+  final TextEditingController _TECTransferDescription = TextEditingController();
+  final TextEditingController _TECValue = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Criando transferência'),
+        backgroundColor: const Color(0xffb74093),
+      ),
+      body: Column(
+        children: <Widget>[
+          Editor(
+            strLabel: 'Transfer Description',
+            strHint: 'Payment for reason x',
+            controller: _TECTransferDescription,
+          ),
+          Editor(
+            strLabel: 'Value',
+            strHint: '0.00',
+            controller: _TECValue,
+            iconMoney: Icons.monetization_on_outlined,
+            inputKeyboard: TextInputType.number,
+          ),
+          ElevatedButton(
+            child: const Text('Ok'),
+            onPressed: () => TransferEfetuation(context),
+          )
+        ],
+      ),
+    );
+  }
+
+  void TransferEfetuation(BuildContext context) {
+    final String strTransferDescription = _TECTransferDescription.text;
+    final double? dblValue = double.tryParse(_TECValue.text);
+
+    if (strTransferDescription != '' && dblValue != null) {
+      final Transfer _createdTransfer =
+          Transfer(dblValue, strTransferDescription);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('$_createdTransfer'),
+      ));
+      Navigator.pop(context, _createdTransfer);
+    }
+  }
+}
+
+class Editor extends StatelessWidget {
+  final String? strLabel;
+  final String? strHint;
+  final TextEditingController? controller;
+  final IconData? iconMoney;
+  final TextInputType? inputKeyboard;
+
+  Editor({this.strLabel, this.strHint, this.controller, this.iconMoney, this.inputKeyboard});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        style: const TextStyle(
+          fontSize: 24,
+        ),
+        decoration: InputDecoration(
+          icon: iconMoney != null ? Icon(iconMoney) : null,
+          labelText: strLabel,
+          hintText: strHint,
+        ),
+        controller: controller,
+        keyboardType: inputKeyboard != null ? TextInputType.number : null,
       ),
     );
   }

@@ -88,39 +88,10 @@ class CardTransferInfo extends StatelessWidget {
   }
 }
 
-class TransferForm extends StatelessWidget {
+class TransferForm extends StatefulWidget {
   final TextEditingController _TECTransferDescription = TextEditingController();
   final TextEditingController _TECValue = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Criando transferência'),
-        backgroundColor: const Color(0xffb74093),
-      ),
-      body: Column(
-        children: <Widget>[
-          Editor(
-            strLabel: 'Transfer Description',
-            strHint: 'Payment for reason x',
-            controller: _TECTransferDescription,
-          ),
-          Editor(
-            strLabel: 'Value',
-            strHint: '0.00',
-            controller: _TECValue,
-            iconMoney: Icons.monetization_on_outlined,
-            inputKeyboard: TextInputType.number,
-          ),
-          ElevatedButton(
-            child: const Text('Ok'),
-            onPressed: () => TransferEfetuation(context),
-          )
-        ],
-      ),
-    );
-  }
 
   void TransferEfetuation(BuildContext context) {
     final String strTransferDescription = _TECTransferDescription.text;
@@ -134,6 +105,45 @@ class TransferForm extends StatelessWidget {
       ));
       Navigator.pop(context, _createdTransfer);
     }
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return TransferFormState();
+  }
+}
+
+class TransferFormState extends State<TransferForm> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Criando transferência'),
+        backgroundColor: const Color(0xffb74093),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Editor(
+              strLabel: 'Transfer Description',
+              strHint: 'Payment for reason x',
+              controller: widget._TECTransferDescription,
+            ),
+            Editor(
+              strLabel: 'Value',
+              strHint: '0.00',
+              controller: widget._TECValue,
+              iconMoney: Icons.monetization_on_outlined,
+              inputKeyboard: TextInputType.number,
+            ),
+            ElevatedButton(
+              child: const Text('Ok'),
+              onPressed: () => widget.TransferEfetuation(context),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 

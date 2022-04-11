@@ -15,35 +15,59 @@ class ByteBankApp extends StatelessWidget {
   }
 }
 
-class ListTransfer extends StatelessWidget {
-  const ListTransfer({Key? key}) : super(key: key);
+/*
+CardTransferInfo(Transfer(666.69, 'Devil bread')),
+CardTransferInfo(Transfer(42.00, 'The answer, my friend.')),
+CardTransferInfo(Transfer(7.00, 'The Old and the New')),
+* */
+
+class ListTransfer extends StatefulWidget {
+  final List<Transfer> _lstTransfers = [];
+
+  @override
+  State<StatefulWidget> createState() {
+    return ListTransferState();
+  }
+}
+
+class ListTransferState extends State<ListTransfer> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ByteBank')),
-      body: Column(
-        children: [
-          CardTransferInfo(Transfer(666.69, 'Devil bread')),
-          CardTransferInfo(Transfer(42.00, 'The answer, my friend.')),
-          CardTransferInfo(Transfer(7.00, 'The Old and the New')),
-        ],
+      appBar: AppBar(
+        title: const Text('ByteBank'),
+        backgroundColor: const Color(0xffb74093),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: widget._lstTransfers.length,
+        itemBuilder: (context, index) {
+          return CardTransferInfo(widget._lstTransfers[index]);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
           final Future<Transfer?> transferNew =
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return TransferForm();
           }));
 
           transferNew.then((transferReceived) {
             debugPrint('$transferReceived');
+            if (transferReceived != null) {
+              debugPrint('???/???');
+              setState(() {
+                widget._lstTransfers.add(transferReceived);
+              });
+            }
           });
         },
       ),
     );
   }
+
 }
 
 class CardTransferInfo extends StatelessWidget {
@@ -120,7 +144,12 @@ class Editor extends StatelessWidget {
   final IconData? iconMoney;
   final TextInputType? inputKeyboard;
 
-  Editor({this.strLabel, this.strHint, this.controller, this.iconMoney, this.inputKeyboard});
+  Editor(
+      {this.strLabel,
+      this.strHint,
+      this.controller,
+      this.iconMoney,
+      this.inputKeyboard});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,3 @@
-import 'package:bytebank/screens/transfer/list.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const ByteBankApp());
@@ -11,14 +10,26 @@ class ByteBankApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       home: Scaffold(
-        body: ListTransfer(),
+        appBar: AppBar(
+          title: const Text('Dashboard'),
+        ),
+        body: Column(
+          children: [
+            Image.asset('images/bytebank_logo.png'),
+            Container(
+              height: 120,
+              width: 100,
+              color: Colors.green,
+              child: Column(
+                children: [
+                  Icon(Icons.people),
+                  Text('Contacts'),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-/*
-CardTransferInfo(Transfer(666.69, 'Devil bread')),
-CardTransferInfo(Transfer(42.00, 'The answer, my friend.')),
-CardTransferInfo(Transfer(7.00, 'The Old and the New')),
-* */
